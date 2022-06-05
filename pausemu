@@ -1,0 +1,13 @@
+#!/bin/sh
+
+case $1 in
+	"p")
+echo '{"command": ["cycle", "pause"]}' | socat - /tmp/mpvmusocket
+	;;
+"n")
+	echo playlist-next | socat - /tmp/mpvmusocket
+	;;
+"r")
+	echo playlist-prev | socat - /tmp/mpvmusocket
+	;;
+esac

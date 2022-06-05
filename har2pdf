@@ -1,0 +1,61 @@
+#!/bin/bash
+###################################################################### 
+#Copyright (C) 2018  Kris Occhipinti
+#https://filmsbykris.com
+
+#This program is free software: you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation, either version 3 of the License, or
+#(at your option) any later version.
+
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU General Public License for more details.
+
+#You should have received a copy of the GNU General Public License
+#along with this program.  If not, see <http://www.gnu.org/licenses/>.
+###################################################################### 
+
+har="$1"
+tmp="tmp"
+
+if [ "$#" -lt "1" ];then
+  echo "har file needed"
+  exit 1
+fi
+
+#title="$(strings *|tr "," "\n"|grep '^\\"bookTitle\\":'|cut -d\" -f4|tr -d '\\' |tr " " "-")"
+#title="$(basename "$(pwd)"|tr " " "-")"
+title="$(grep -i identifiers "$har"|sed 's/\\"title\\":/\nTITLE:/'g|cut -d\" -f2|cut -d\\ -f1|tail -n1|tr -d ".")"
+
+if [ "$title" = "" ];then
+  read -p "Title Needed: " title
+fi
+
+
+mkdir tmp
+cd tmp
+
+csplit -z "../$har" /response/ {*}
+
+echo "$title"
+
+for i in * 
+do
+  img="$(grep 'inline; filename' $i|cut -d\' -f3|tr -d '"')"
+  echo "$img"
+  if [ "$img" != "" ];then
+    grep 'text' $i|cut -d\" -f4|base64 -d > $img
+  #if [ -f "$img" ];then
+    convert "$img" -resize 1000 "$img"
+  fi
+
+done
+
+convert -density 300 *.jpg "../$title.pdf"
+
+cd ../
+rm -fr "$tmp"
+
+xdg-open "$title.pdf"

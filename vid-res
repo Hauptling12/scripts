@@ -1,0 +1,3 @@
+#!/bin/sh
+
+ffprobe -v error -of flat=s=_ -select_streams v:0 -show_entries stream=height,width $1

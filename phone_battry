@@ -1,0 +1,2 @@
+#!/bin/sh
+ssh 192.168.20.18 -p 8022 termux-battery-status | grep "percentage" | cut -d: -f2 | sed "s/,//g" | toilet

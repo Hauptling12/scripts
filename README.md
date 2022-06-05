@@ -1,2 +1,2 @@
 # scripts
-A collection of scripts
+A collection of python bash c scripts

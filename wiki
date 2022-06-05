@@ -1,0 +1,15 @@
+#!/bin/bash
+case $1 in
+    "vid")
+    mpv "$(cd $HOME/my-work/notes/ob/obsidian/wiki && fzf | awk '{print "/home/chief/my-work/notes/ob/obsidian/wiki/" $0}')"
+        ;;
+    "htmlg")
+qutebrowser "$(cd $HOME/my-work/notes/ob/obsidian/wiki && fzf | awk '{print "/home/chief/my-work/notes/ob/obsidian/wiki/" $0}')"
+        ;;
+"htmlc")
+w3m "$(cd $HOME/my-work/notes/ob/obsidian/wiki && fzf | awk '{print "/home/chief/my-work/notes/ob/obsidian/wiki/" $0}')"
+;;
+"img")
+    feh "$(cd $HOME/my-work/notes/ob/obsidian/wiki && fzf | awk '{print "/home/chief/my-work/notes/ob/obsidian/wiki/" $0}')"
+    ;;
+esac
