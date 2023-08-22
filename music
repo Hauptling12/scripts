@@ -1,7 +1,10 @@
 #!/bin/sh
+mytitle="music-sc"
+echo -e '\033k'$mytitle'\033\\'
 
-case $(echo "lofi\nall\ncountry" | fzf) in
-    "lofi") cd $HOME/my-work/entertment/music/lofi-full/ && mpv --loop-playlist * --no-video --input-ipc-server=/tmp/mpvmusocket ;;
-    "all") cd $HOME/my-work/entertment/music/ && mpv --loop-playlist * --no-video --input-ipc-server=/tmp/mpvmusocket ;;
-    "country") cd $HOME/my-work/entertment/music/country/ && mpv --loop-playlist * --no-video --input-ipc-server=/tmp/mpvmusocket ;;
+case $(echo "lofi\nall\ncountry\nproductive" | fzf) in
+    "lofi") cd $HOME/my-work/entertment/music/s/lofi-full/ && printf "\e]2;music-sc\a" && mpv --loop-playlist * --no-video --input-ipc-server=/tmp/mpvmusocket ;;
+    "all") cd $HOME/my-work/entertment/music/ && printf "\e]2;music-sc\a" && mpv --loop-playlist * --no-video --input-ipc-server=/tmp/mpvmusocket ;;
+    "country") cd $HOME/my-work/entertment/music/s/country/ && printf "\e]2;music-sc\a" && mpv --loop-playlist * --no-video --input-ipc-server=/tmp/mpvmusocket ;;
+    "productive") cd $HOME/my-work/entertment/music/prod/ && printf "\e]2;music-sc\a" && mpv --loop-playlist * --no-video --input-ipc-server=/tmp/mpvmusocket ;;
 esac

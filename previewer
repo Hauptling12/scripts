@@ -1,0 +1,9 @@
+#!/bin/sh
+case $1 in
+    "*.org")
+        pandoc -f org -t html "$1"| w3m -T text/html
+        ;;
+    "*.md")
+    pandoc -f gfm -t html "$1" | w3m -T text/html
+    ;;
+esac

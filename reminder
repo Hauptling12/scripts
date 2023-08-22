@@ -1,0 +1,100 @@
+#!/bin/bash
+######################################################################
+#Copyright (C) 2018  Kris Occhipinti
+#https://filmsbykris.com
+
+#This program is free software: you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation, either version 3 of the License, or
+#(at your option) any later version.
+
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU General Public License for more details.
+
+#You should have received a copy of the GNU General Public License
+#along with this program.  If not, see <http://www.gnu.org/licenses/>.
+######################################################################
+
+notes="$HOME/f/we/we"
+minutes=15 #number of minutes for notifications
+url='http://filmsbykris.com/scripts/2018/note/'
+
+function main(){
+  echo "Welcome..."
+  if [ "$1" = "add" ]
+  then
+    add
+  elif [ "$1" = "notify" ]
+  then
+    notify
+  else
+    cat "$notes"
+  fi
+
+  exit 0
+}
+
+function notify(){
+  c=$(date +%s)
+  m=$(($minutes*60+$c))
+
+  cat "$notes"|while read line;
+  do
+    time="$(echo $line|cut -d\| -f1)"
+    date="$(echo $line|cut -d\| -f2)"
+    title="$(echo $line|cut -d\| -f3)"
+    note="$(echo $line|cut -d\| -f4)"
+
+    if (( $time > $c ))
+    then
+      if (( $time < $m ))
+      then
+        title="$(rawurlencode "$title")"
+        note="$(rawurlencode "$note")"
+        url="$url?title=$title&note=$note"
+        notify-send -t 0 "$title" "$note $url"
+      fi
+    fi
+  done
+}
+
+function add(){
+  echo "When would you like to be reminded?"
+  read t
+
+  date -d "$t" || (echo "bad date";exit 1)
+  time="$(date +%s -d "$t")"
+  date="$(date -d "$t")"
+  #echo "Setting reminder for $date"
+
+  echo -n "Title:"
+  read title
+
+  echo -n "Note:"
+  read note
+
+  echo "$time|$date|$title|$note" >> "$notes"
+}
+
+
+rawurlencode() {
+  local string="${1}"
+  local strlen=${#string}
+  local encoded=""
+  local pos c o
+
+  for (( pos=0 ; pos<strlen ; pos++ )); do
+     c=${string:$pos:1}
+     case "$c" in
+        [-_.~a-zA-Z0-9] ) o="${c}" ;;
+        * )               printf -v o '%%%02x' "'$c"
+     esac
+     encoded+="${o}"
+  done
+  echo "${encoded}"    # You can either set a return variable (FASTER)
+  REPLY="${encoded}"   #+or echo the result (EASIER)... or both... :p
+}
+
+main $*

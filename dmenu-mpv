@@ -1,0 +1,24 @@
+#!/bin/sh
+pause() {
+     if [ $(cat /tmp/dmmpv) == "paused" ];then
+        echo "playing" > /tmp/dmmpv
+     else
+         echo "paused" > /tmp/dmmpv
+     fi
+     echo cycle pause | socat - /tmp/mpvsocket
+}
+
+out="$(echo "$(cat /tmp/dmmpv)\n\nplaylist prev\nplaylist next" | dmenu -l 5 | sed -e 's/playing/pl/g' -e 's/paused/pl/g')"
+
+case "${out}" in
+    "pl")
+        pause
+        ;;
+    "playlist next")
+        echo playlist_next | socat - /tmp/mpvsocket
+        ;;
+    "playlist prev")
+        echo playlist_prev| socat - /tmp/mpvsocket
+        ;;
+    *) echo "Error: invalid option" ;;
+esac

@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Takes a YouTube URI to a playlist (fairly liberal, it's fine as long
 # as the playlist id can be extracted), and prints a list of URIs in a
 # YouTube playlist.

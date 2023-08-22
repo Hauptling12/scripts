@@ -16,4 +16,4 @@
 # along with this program; if not, see <http://www.gnu.org/licenses/>.
 [ -z "$BROWSER" ] && BROWSER=firefox
 
-buku -p -f 4 | sed 's/\t/ /g' | fzf | awk '{print $2}' | xargs -r -I $BROWSER {}
+buku -p -f 4 | sed 's/\t/ /g' | fzf -e --no-mouse | awk '{print $2}' | xargs -r -I {} $BROWSER {}

@@ -1,5 +1,4 @@
-#!/bin/bash
-
+#!/bin/sh
 case $1 in
 "-n")
 strings /dev/urandom | grep -o '[[:alnum:]]' |head -n $2 | tr -d '\n'
